@@ -21,11 +21,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 
 @Table(name= "user", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
 public class User implements UserDetails{
@@ -34,10 +34,11 @@ public class User implements UserDetails{
 	Integer id;
 	@Column(nullable = false)
 	String username;
-	String password;
-	String firstname;
+	@Column(nullable = false)
 	String lastname;
+	String firstname;
 	String country;
+	String password;
 	@Enumerated(EnumType.STRING)
 	Role role;
 	
@@ -45,5 +46,21 @@ public class User implements UserDetails{
     public Collection<? extends GrantedAuthority> getAuthorities() {
       return List.of(new SimpleGrantedAuthority((role.name())));
     }
+	 @Override
+	    public boolean isAccountNonExpired() {
+	       return true;
+	    }
+	    @Override
+	    public boolean isAccountNonLocked() {
+	       return true;
+	    }
+	    @Override
+	    public boolean isCredentialsNonExpired() {
+	        return true;
+	    }
+	    @Override
+	    public boolean isEnabled() {
+	        return true;
+	    }
 
 }
